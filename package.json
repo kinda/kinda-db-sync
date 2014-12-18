@@ -1,0 +1,26 @@
+{
+  "name": "kinda-db-sync",
+  "version": "0.1.0",
+  "description": "...",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kinda/kinda-db-sync"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Manuel Vila <mvila@3base.com>",
+  "license": "MIT",
+  "dependencies": {
+    "co": "^3.1.0",
+    "co-wait": "0.0.0",
+    "kinda-config": "https://github.com/kinda/kinda-config/tarball/master",
+    "kinda-db-auth": "https://github.com/kinda/kinda-db-auth/tarball/master",
+    "kinda-http-client": "https://github.com/kinda/kinda-http-client/tarball/master",
+    "kinda-object": "https://github.com/kinda/kinda-object/tarball/master",
+    "kinda-util": "https://github.com/kinda/kinda-util/tarball/master",
+    "idgen": "^2.0.2",
+    "lodash": "^2.4.1"
+  }
+}
