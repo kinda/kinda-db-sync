@@ -75,7 +75,7 @@ var SyncServer = Sync.extend('SyncServer', function() {
       if (this.url === '/ping') {
         if (this.method === 'GET') {
           this.body = 'pong';
-          this.logLevel = 0;
+          this.logLevel = 'silence';
           return;
         }
       }

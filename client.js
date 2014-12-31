@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var co = require('co');
 var wait = require('co-wait');
+var log = require('kinda-log').create();
 var util = require('kinda-util').create();
 var config = require('kinda-config').get('kinda-db-sync/client');
 var httpClient = require('kinda-http-client').create();
@@ -173,7 +174,7 @@ var SyncClient = Sync.extend('SyncClient', function() {
     try {
       this._isRunning = true;
       this.emit('status.didChange');
-      // util.log('Synchronisation started');
+      // log.debug('Synchronisation started');
       if (!this.token) return;
       var subspaceId = yield this.getSubspaceId();
       if (!subspaceId) return;
@@ -246,7 +247,7 @@ var SyncClient = Sync.extend('SyncClient', function() {
       this.emit('status.didChange');
       if (didUpdateLocalDatabase)
         this.emit('didUpdateLocalDatabase');
-      // util.log('Synchronisation finished');
+      // log.debug('Synchronisation finished');
     }
   };
 

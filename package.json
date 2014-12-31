@@ -15,11 +15,11 @@
   "dependencies": {
     "co": "^3.1.0",
     "co-wait": "0.0.0",
-    "kinda-config": "https://github.com/kinda/kinda-config/tarball/master",
-    "kinda-db-auth": "https://github.com/kinda/kinda-db-auth/tarball/master",
-    "kinda-http-client": "https://github.com/kinda/kinda-http-client/tarball/master",
-    "kinda-object": "https://github.com/kinda/kinda-object/tarball/master",
-    "kinda-util": "https://github.com/kinda/kinda-util/tarball/master",
+    "kinda-config": "kinda/kinda-config",
+    "kinda-db-auth": "kinda/kinda-db-auth",
+    "kinda-http-client": "kinda/kinda-http-client",
+    "kinda-object": "kinda/kinda-object",
+    "kinda-util": "kinda/kinda-util",
     "idgen": "^2.0.2",
     "lodash": "^2.4.1"
   }
