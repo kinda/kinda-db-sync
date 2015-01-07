@@ -142,7 +142,9 @@ var SyncClient = Sync.extend('SyncClient', function() {
       }
       this._isStarted = false;
       this.emit('status.didChange');
-    }).call(this);
+    }.bind(this)).catch(function(err) {
+      console.error(err.stack);
+    });
   };
 
   this.stop = function() {
@@ -155,7 +157,9 @@ var SyncClient = Sync.extend('SyncClient', function() {
       }
       this._isStopping = false;
       this.emit('status.didChange');
-    }).call(this);
+    }.bind(this)).catch(function(err) {
+      console.error(err.stack);
+    });
   };
 
   this.waitStop = function *() {

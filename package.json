@@ -17,14 +17,14 @@
   "author": "Manuel Vila <mvila@3base.com>",
   "license": "MIT",
   "dependencies": {
-    "co": "^3.1.0",
+    "co": "^4.1.0",
     "co-wait": "0.0.0",
+    "idgen": "^2.0.2",
     "kinda-config": "^0.2.2",
     "kinda-db-auth": "^0.1.0",
     "kinda-http-client": "^0.1.0",
     "kinda-object": "^0.1.0",
     "kinda-util": "^0.1.0",
-    "idgen": "^2.0.2",
     "lodash": "^2.4.1"
   }
 }
