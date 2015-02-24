@@ -25,6 +25,6 @@
     "kinda-http-client": "^0.1.0",
     "kinda-object": "^0.1.0",
     "kinda-util": "^0.1.0",
-    "lodash": "^2.4.1"
+    "lodash": "^3.3.0"
   }
 }

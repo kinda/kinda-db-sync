@@ -78,7 +78,7 @@ var Sync = KindaObject.extend('Sync', function() {
         var keys = ops.map(function(op) { return op.key });
         var results = yield tr.getMany(table, keys, { errorIfMissing: false });
         ops.forEach(function(op) {
-          var result = _.find(results, { key: op.key });
+          var result = _.find(results, 'key', op.key);
           if (result) operations[op.index].value = result.value;
         });
       });
