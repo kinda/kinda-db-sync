@@ -95,9 +95,30 @@ var Sync = KindaObject.extend('Sync', function() {
 
   this.delLocalOperations = function *(subspaceId, lastOperationId) {
     var prefix = [this.database.name, '$SyncOperations', subspaceId];
-    var items = yield this.database.store.delRange({
-      prefix: prefix, end: lastOperationId });
+    yield this.database.store.delRange({ prefix: prefix, end: lastOperationId });
   }
+
+  this.countLocalOperations = function *(subspaceId) {
+    var prefix = [this.database.name, '$SyncOperations', subspaceId];
+    var count = yield this.database.store.getCount({ prefix: prefix });
+    return count;
+  };
+
+  this.reinitializeSubspace = function *(subspaceId) {
+    var key = [this.database.name, '$SyncSubspaces', subspaceId];
+    yield this.database.store.del(key, { errorIfMissing: false });
+    var prefix = [this.database.name, '$SyncOperations', subspaceId];
+    yield this.database.store.delRange({ prefix: prefix });
+    var tables = this.database.getTables();
+    for (var i = 0; i < tables.length; i++) {
+      var table = tables[i];
+      yield this.database.forRange(table, {}, function *(item, key) {
+        var itemSubspaceId = this.determineSubspaceId(table, key, item);
+        if (itemSubspaceId !== subspaceId) return;
+        yield this.addLocalOperation(this.database, table, key, item, 'put');
+      }, this);
+    }
+  };
 
   this.applyRemoteOperations = function *(tr, subspaceId, operations, sync) {
     sync = !!sync;
