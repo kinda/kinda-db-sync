@@ -37,6 +37,7 @@ var Sync = KindaObject.extend('Sync', function() {
   };
 
   this.addLocalOperation = function *(tr, table, key, item, type) {
+    if (_.contains(this.excludedTables, table.name)) return;
     console.log('addLocalOperation', table.name, key, type);
     var subspaceId = this.determineSubspaceId(table, key, item);
     var operationId = yield this.incrementLastLocalOperationId(tr, subspaceId);
@@ -112,6 +113,7 @@ var Sync = KindaObject.extend('Sync', function() {
     var tables = this.database.getTables();
     for (var i = 0; i < tables.length; i++) {
       var table = tables[i];
+      if (_.contains(this.excludedTables, table.name)) continue;
       yield this.database.forRange(table, {}, function *(item, key) {
         var itemSubspaceId = this.determineSubspaceId(table, key, item);
         if (itemSubspaceId !== subspaceId) return;

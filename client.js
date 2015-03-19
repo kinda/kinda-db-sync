@@ -25,6 +25,8 @@ var SyncClient = Sync.extend('SyncClient', function() {
     this.database = database;
     database.sync = this;
 
+    this.excludedTables = [];
+
     database.onAsync('didInitialize', function *() {
       yield this.sync.initialize(this);
     });

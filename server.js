@@ -7,9 +7,13 @@ var Sync = require('./');
 var SyncServer = Sync.extend('SyncServer', function() {
   this.setCreator(function() {});
 
-  this.plug = function(database) {
+  this.plug = function(database, options) {
+    if (!options) options = {};
+
     this.database = database;
     database.sync = this;
+
+    this.excludedTables = options.excludedTables || [];
 
     database.onAsync('didInitialize', function *() {
       yield this.sync.initialize(this);
