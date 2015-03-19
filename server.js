@@ -5,15 +5,15 @@ var util = require('kinda-util').create();
 var Sync = require('./');
 
 var SyncServer = Sync.extend('SyncServer', function() {
-  this.setCreator(function() {});
-
-  this.plug = function(database, options) {
+  this.setCreator(function(options) {
     if (!options) options = {};
 
+    this.excludedTables = options.excludedTables || [];
+  });
+
+  this.plug = function(database) {
     this.database = database;
     database.sync = this;
-
-    this.excludedTables = options.excludedTables || [];
 
     database.onAsync('didInitialize', function *() {
       yield this.sync.initialize(this);

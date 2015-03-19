@@ -19,13 +19,13 @@ var SyncClient = Sync.extend('SyncClient', function() {
     if (util.endsWith(url, '/'))
       url = url.substr(0, url.length - 1);
     this.baseURL = url;
+
+    this.excludedTables = [];
   });
 
   this.plug = function(database) {
     this.database = database;
     database.sync = this;
-
-    this.excludedTables = [];
 
     database.onAsync('didInitialize', function *() {
       yield this.sync.initialize(this);
