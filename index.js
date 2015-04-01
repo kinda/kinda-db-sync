@@ -38,8 +38,9 @@ var Sync = KindaObject.extend('Sync', function() {
 
   this.addLocalOperation = function *(tr, table, key, item, type) {
     if (_.contains(this.excludedTables, table.name)) return;
-    console.log('addLocalOperation', table.name, key, type);
     var subspaceId = this.determineSubspaceId(table, key, item);
+    if (subspaceId == null) return;
+    console.log('addLocalOperation', table.name, key, type);
     var operationId = yield this.incrementLastLocalOperationId(tr, subspaceId);
     var operationKey = [tr.name, '$SyncOperations', subspaceId, operationId];
     var operationItem = {
