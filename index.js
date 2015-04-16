@@ -78,7 +78,7 @@ var Sync = KindaObject.extend('Sync', function() {
     _.forOwn(tables, function(ops, table) {
       fns.push(function *() {
         var keys = ops.map(function(op) { return op.key });
-        var results = yield tr.getMany(table, keys, { errorIfMissing: false });
+        var results = yield tr.getItems(table, keys, { errorIfMissing: false });
         ops.forEach(function(op) {
           var result = _.find(results, 'key', op.key);
           if (result) operations[op.index].value = result.value;
@@ -115,7 +115,7 @@ var Sync = KindaObject.extend('Sync', function() {
     for (var i = 0; i < tables.length; i++) {
       var table = tables[i];
       if (_.contains(this.excludedTables, table.name)) continue;
-      yield this.database.forRange(table, {}, function *(item, key) {
+      yield this.database.forEachItems(table, {}, function *(item, key) {
         var itemSubspaceId = this.determineSubspaceId(table, key, item);
         if (itemSubspaceId !== subspaceId) return;
         yield this.addLocalOperation(this.database, table, key, item, 'put');
@@ -130,11 +130,11 @@ var Sync = KindaObject.extend('Sync', function() {
       switch (op.type) {
       case 'put':
         console.log('put', op.table, op.key);
-        yield tr.put(op.table, op.key, op.value, { sync: sync });
+        yield tr.putItem(op.table, op.key, op.value, { sync: sync });
         break;
       case 'del':
         console.log('del', op.table, op.key);
-        yield tr.del(op.table, op.key, { errorIfMissing: false, sync: sync });
+        yield tr.deleteItem(op.table, op.key, { errorIfMissing: false, sync: sync });
         break;
       default:
         throw new Error('invalid operation type');

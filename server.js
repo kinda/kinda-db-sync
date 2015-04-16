@@ -19,11 +19,11 @@ var SyncServer = Sync.extend('SyncServer', function() {
       yield this.sync.initialize(this);
     });
 
-    database.onAsync('didPut', function *(table, key, item) {
+    database.onAsync('didPutItem', function *(table, key, item) {
       yield this.sync.addLocalOperation(this, table, key, item, 'put');
     });
 
-    database.onAsync('didDel', function *(table, key, item) {
+    database.onAsync('didDeleteItem', function *(table, key, item) {
       yield this.sync.addLocalOperation(this, table, key, item, 'del');
     });
   };

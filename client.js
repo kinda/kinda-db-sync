@@ -31,12 +31,12 @@ var SyncClient = Sync.extend('SyncClient', function() {
       yield this.sync.initialize(this);
     });
 
-    database.onAsync('didPut', function *(table, key, item, options) {
+    database.onAsync('didPutItem', function *(table, key, item, options) {
       if (options && options.sync === false) return;
       yield this.sync.addLocalOperation(this, table, key, item, 'put');
     });
 
-    database.onAsync('didDel', function *(table, key, item, options) {
+    database.onAsync('didDeleteItem', function *(table, key, item, options) {
       if (options && options.sync === false) return;
       yield this.sync.addLocalOperation(this, table, key, item, 'del');
     });
