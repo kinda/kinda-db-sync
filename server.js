@@ -33,11 +33,11 @@ var SyncServer = Sync.extend('SyncServer', function() {
     return undefined;
   };
 
-  this.signInWithToken = function *(token) { // to overload
+  this.signInWithPreviousAuthorization = function *(authorization) { // to overload
     return undefined;
   };
 
-  this.signOut = function *(token) { // to overload
+  this.signOut = function *(authorization) { // to overload
   };
 
   this.getSubspaces = function *() { // to overload
@@ -70,8 +70,8 @@ var SyncServer = Sync.extend('SyncServer', function() {
   this.middleware = function() {
     var that = this;
     var tokensRegExp = /^\/tokens\/(.+)$/;
-    var subspacesRegExp = /^\/subspaces\?token=(.+)$/;
-    var operationsRegExp = /^\/subspaces\/([^\/]+)\/operations\?lastOperationId=(.+)&token=(.+)$/;
+    var subspacesRegExp = /^\/subspaces\?authorization=(.+)$/;
+    var operationsRegExp = /^\/subspaces\/([^\/]+)\/operations\?lastOperationId=(.+)&authorization=(.+)$/;
 
     return function *(next) {
       var matches;
@@ -86,36 +86,35 @@ var SyncServer = Sync.extend('SyncServer', function() {
 
       if (this.url === '/tokens') {
         if (this.method === 'POST') {
-          var tokenItem = yield that.signInWithCredentials(
+          var authorizationItem = yield that.signInWithCredentials(
             this.request.body.username,
             this.request.body.password,
             this.request.body.expirationTime
           );
-          if (!tokenItem) {
+          if (!authorizationItem) {
             this.status = 403;
-            this.body = { error: 'token request failed' };
+            this.body = { error: 'authorization failed' };
             return;
           }
           this.status = 201;
-          this.body = tokenItem;
+          this.body = authorizationItem;
           return;
         }
       }
 
       matches = this.url.match(tokensRegExp);
       if (matches) {
-        var token = util.decodeValue(matches[1]);
+        var authorization = util.decodeValue(matches[1]);
         if (this.method === 'GET') {
-          var tokenItem = yield that.signInWithToken(token);
-          if (!tokenItem) {
-            this.status = 403;
-            this.body = { error: 'invalid token' };
+          var authorizationItem = yield that.signInWithPreviousAuthorization(authorization);
+          if (!authorizationItem) {
+            this.status = 404;
             return;
           }
-          this.body = tokenItem;
+          this.body = authorizationItem;
           return;
         } else if (this.method === 'DELETE') {
-          yield that.signOut(token);
+          yield that.signOut(authorization);
           this.status = 204;
           return;
         }
@@ -123,10 +122,10 @@ var SyncServer = Sync.extend('SyncServer', function() {
 
       matches = this.url.match(subspacesRegExp);
       if (matches) {
-        var token = util.decodeValue(matches[1]);
-        if (!(yield that.signInWithToken(token))) {
+        var authorization = util.decodeValue(matches[1]);
+        if (!(yield that.signInWithPreviousAuthorization(authorization))) {
           this.status = 403;
-          this.body = { error: 'invalid token' };
+          this.body = { error: 'authorization failed' };
           return;
         }
         if (this.method === 'GET') {
@@ -139,10 +138,10 @@ var SyncServer = Sync.extend('SyncServer', function() {
       if (matches) {
         var subspaceId = util.decodeValue(matches[1]);
         var lastOperationId = util.decodeValue(matches[2]);
-        var token = util.decodeValue(matches[3]);
-        if (!(yield that.signInWithToken(token))) {
+        var authorization = util.decodeValue(matches[3]);
+        if (!(yield that.signInWithPreviousAuthorization(authorization))) {
           this.status = 403;
-          this.body = { error: 'invalid token' };
+          this.body = { error: 'authorization failed' };
           return;
         }
         if (this.method === 'GET') {

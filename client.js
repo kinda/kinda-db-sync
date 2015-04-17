@@ -181,7 +181,7 @@ var SyncClient = Sync.extend('SyncClient', function() {
       this._isRunning = true;
       this.emit('status.didChange');
       // log.debug('Synchronisation started');
-      if (!this.token) return;
+      if (!this.authorization) return;
       var subspaceId = yield this.getSubspaceId();
       if (!subspaceId) return;
       try {
@@ -281,7 +281,7 @@ var SyncClient = Sync.extend('SyncClient', function() {
 
   this.getSubspaces = function *() {
     var url = this.baseURL + '/subspaces'
-    url += '?token=' + util.encodeValue(this.token);
+    url += '?authorization=' + util.encodeValue(this.authorization);
     var params = { method: 'GET', url: url };
     var res = yield httpClient.request(params);
     if (res.statusCode !== 200)
@@ -293,7 +293,7 @@ var SyncClient = Sync.extend('SyncClient', function() {
     console.log('getServerOperations:', subspaceId, lastOperationId);
     var url = this.baseURL + '/subspaces/' + util.encodeValue(subspaceId);
     url += '/operations?lastOperationId=' + util.encodeValue(lastOperationId);
-    url += '&token=' + util.encodeValue(this.token);
+    url += '&authorization=' + util.encodeValue(this.authorization);
     var params = { method: 'GET', url: url };
     var res = yield httpClient.request(params);
     if (res.statusCode !== 200)
@@ -305,7 +305,7 @@ var SyncClient = Sync.extend('SyncClient', function() {
     console.log('postLocalOperations:', subspaceId, operations.length + ' op(s)');
     var url = this.baseURL + '/subspaces/' + util.encodeValue(subspaceId);
     url += '/operations?lastOperationId=' + util.encodeValue(lastOperationId);
-    url += '&token=' + util.encodeValue(this.token);
+    url += '&authorization=' + util.encodeValue(this.authorization);
     var body = { operations: operations };
     var params = { method: 'POST', url: url, body: body };
     var res = yield httpClient.request(params);
