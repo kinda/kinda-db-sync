@@ -322,7 +322,7 @@ var SyncClient = Sync.extend('SyncClient', function() {
       this.stop();
       yield this.waitStop();
     }
-    yield this.database.resetDatabase();
+    yield this.database.destroyDatabase();
     if (isStarted) this.start(); else yield this.run();
     yield this.setSubspaceId(currentSubspaceId);
   };
