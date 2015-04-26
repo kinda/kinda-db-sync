@@ -111,7 +111,7 @@ var Sync = KindaObject.extend('Sync', function() {
     yield this.database.store.del(key, { errorIfMissing: false });
     var prefix = [this.database.name, '$SyncOperations', subspaceId];
     yield this.database.store.delRange({ prefix: prefix });
-    var tables = this.database.getTables();
+    var tables = this.database.tables;
     for (var i = 0; i < tables.length; i++) {
       var table = tables[i];
       if (_.contains(this.excludedTables, table.name)) continue;
